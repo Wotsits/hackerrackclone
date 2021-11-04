@@ -23,6 +23,7 @@ const httpLink = createHttpLink({
   uri: 'http://localhost:4000'
 })
 
+
 const wsLink = new WebSocketLink({
   uri: `ws://localhost:4000/graphql`,
   options: {
@@ -32,6 +33,7 @@ const wsLink = new WebSocketLink({
     }
   }
 });
+
 
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
@@ -45,6 +47,7 @@ const authLink = setContext((_, { headers }) => {
   }
 });
 
+
 const link = split(
   ({ query }) => {
     const { kind, operation } = getMainDefinition(query);
@@ -56,6 +59,7 @@ const link = split(
   wsLink,
   authLink.concat(httpLink)
 );
+
 
 //creates instance of client
 const client = new ApolloClient({

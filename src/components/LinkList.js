@@ -1,6 +1,7 @@
 import React from'react'
 import { useQuery, gql } from '@apollo/client'
 import Link from './Link'
+import { useHistory } from 'react-router-dom'
 import { LINKS_PER_PAGE } from '../constants'
 
 export const FEED_QUERY = gql`
@@ -43,6 +44,33 @@ const NEW_LINKS_SUBSCRIPTION = gql`
         user {
           id
         }
+      }
+    }
+  }
+`;
+
+const NEW_VOTES_SUBSCRIPTION = gql`
+  subscription {
+    newVote {
+      id
+      link {
+        id
+        url
+        description
+        createdAt
+        postedBy {
+          id
+          name
+        }
+        votes {
+          id
+          user {
+            id
+          }
+        }
+      }
+      user {
+        id
       }
     }
   }
@@ -91,6 +119,10 @@ const LinkList = () => {
           });
         }
       });
+
+    subscribeToMore({
+    document: NEW_VOTES_SUBSCRIPTION
+    });
        
     return (
         <div>
